@@ -64,6 +64,16 @@ public class UserClient extends BurgerConfig {
                 .log().all();
     }
 
+    @Step("Send DELETE request to /api/auth/users")
+    public ValidatableResponse deleteAllUsers() {
+        return given()
+                .spec(getBaseSpec())
+                .log().all()
+                .delete(EndPoints.USER_PATH + "users")
+                .then()
+                .log().all();
+    }
+
     @Step("Send PATCH request to /api/auth/user")
     public ValidatableResponse updateUserByAuthorization(User user, String accessToken) {
         return given()

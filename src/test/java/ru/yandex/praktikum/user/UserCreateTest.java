@@ -1,5 +1,6 @@
 package ru.yandex.praktikum.user;
 
+import org.junit.After;
 import org.junit.Test;
 import org.junit.Before;
 import io.qameta.allure.Epic;
@@ -26,6 +27,11 @@ public class UserCreateTest {
     public void setUp() {
         user = GenerateUser.getRandomUser();
         userClient = new UserClient();
+    }
+
+    @After
+    public void tearDown() {
+        userClient.deleteAllUsers();
     }
 
     @Test
