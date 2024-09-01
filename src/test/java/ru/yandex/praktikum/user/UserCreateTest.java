@@ -92,14 +92,23 @@ public class UserCreateTest {
     @Test
     @DisplayName("Repeated request by create user")
     public void repeatedRequestByCreateUser() {
-        userClient.createUser(user);
+        // Создание пользователя
         response = userClient.createUser(user);
-        int statusCode = response.extract().statusCode();
+        response.extract().statusCode();
+        String accessToken = response.extract().path("accessToken");
+
+        // Повторное создание пользователя
+        response = userClient.createUser(user);
+        int repeatedStatusCode = response.extract().statusCode();
         String message = response.extract().path("message");
         boolean isCreate = response.extract().path("success");
 
-        assertThat("Code not equal", statusCode, equalTo(SC_FORBIDDEN));
+        // Удаление пользователя
+        userClient.deleteUser(accessToken);
+
+        assertThat("Code not equal", repeatedStatusCode, equalTo(SC_FORBIDDEN));
         assertThat("Message not equal", message, equalTo(MESSAGE_FORBIDDEN));
         assertThat("User is create correct", isCreate, equalTo(false));
     }
+
 }
